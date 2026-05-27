@@ -383,8 +383,7 @@
 
     <!-- MUSIC -->
 <audio id="bg-music" loop>
-    <!-- Replace src with your music file, e.g. src="music/birthday.mp3" -->
-    <source src="E:\birthday.html\music\Happy Birthday on Piano - lesfm_1779912218143 (41).mp3" type="audio/mpeg">
+    <source src="music/birthday.mp3" type="audio/mpeg">
 </audio>
 <button id="music-btn" onclick="toggleMusic()" title="Play / Pause Music">▶</button>
 <span id="music-label">♪ Birthday Music</span>
@@ -622,36 +621,55 @@
 
           // MUSIC
     const music = document.getElementById('bg-music');
-    const musicBtn = document.getElementById('music-btn');
-    const musicLabel = document.getElementById('music-label');
-    let musicPlaying = false;
+const musicBtn = document.getElementById('music-btn');
+const musicLabel = document.getElementById('music-label');
 
-    function toggleMusic() {
-        if (musicPlaying) {
-            music.pause();
-            musicBtn.textContent = '▶';
-            musicBtn.classList.remove('playing');
-            musicLabel.textContent = '♪ Birthday Music';
-        } else {
-            music.play().catch(() => {});
-            musicBtn.textContent = '⏸';
-            musicBtn.classList.add('playing');
-            musicLabel.textContent = '♪ Now Playing';
-        }
-        musicPlaying = !musicPlaying;
-        musicLabel.classList.add('show');
-        setTimeout(() => musicLabel.classList.remove('show'), 2500);
+let musicPlaying = false;
+
+function toggleMusic() {
+
+    if (music.paused) {
+
+        music.play();
+
+        musicBtn.textContent = '⏸';
+        musicBtn.classList.add('playing');
+        musicLabel.textContent = '♪ Now Playing';
+
+        musicPlaying = true;
+
+    } else {
+
+        music.pause();
+
+        musicBtn.textContent = '▶';
+        musicBtn.classList.remove('playing');
+        musicLabel.textContent = '♪ Birthday Music';
+
+        musicPlaying = false;
     }
 
-    // Auto-play on first user interaction
-    document.addEventListener('click', function startOnce() {
-        if (!musicPlaying) toggleMusic();
-        document.removeEventListener('click', startOnce);
-    }, { once: false });
-    // Actually tie auto-play to the Enter button specifically
-    document.querySelector('#scene-1 .btn').addEventListener('click', () => {
-        if (!musicPlaying) toggleMusic();
-    }, { once: true });
+    musicLabel.classList.add('show');
+
+    setTimeout(() => {
+        musicLabel.classList.remove('show');
+    }, 2500);
+}
+
+// Start music when first button is clicked
+document.querySelector('#scene-1 .btn').addEventListener('click', () => {
+
+    if (music.paused) {
+
+        music.play();
+
+        musicBtn.textContent = '⏸';
+        musicBtn.classList.add('playing');
+
+        musicPlaying = true;
+    }
+
+}, { once: true });
 
 
         // SCENE NAVIGATION
