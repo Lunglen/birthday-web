@@ -187,6 +187,23 @@
             box-shadow: 0 15px 30px rgba(251,111,146,0.5);
         }
 
+         #scene-3 {
+            justify-content: flex-start;
+            padding-top: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        #scene-3 .scene-3-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 1.2rem 1.5rem 2rem;
+            min-height: 100%;
+        }
+        #scene-3 h1 { font-size: clamp(1.5rem, 4vw, 3rem); margin-bottom: 0.3rem; }
+        #scene-3 > .scene-3-inner > p { margin-bottom: 0.8rem; opacity: 0.75; }
+
         .photo-grid {
             display: grid;
 
