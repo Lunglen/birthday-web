@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday, My Princess | 2026</title>
 
-
+    <!-- Modern Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -90,11 +90,48 @@
             transition: transform 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
         }
 
-        .experience-container {
-            position: relative;
-            height: 100vh;
-            width: 100%;
+        
+        /* ── MUSIC PLAYER ── */
+        #music-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 9999;
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            background: var(--deep-rose);
+            border: none;
+            cursor: pointer !important;
+            box-shadow: 0 8px 24px rgba(251,111,146,0.4);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem;
+            transition: 0.3s;
+            color: white;
         }
+        #music-btn:hover { transform: scale(1.12); box-shadow: 0 12px 30px rgba(251,111,146,0.6); }
+        #music-btn.playing { animation: pulse-btn 2s infinite; }
+        @keyframes pulse-btn {
+            0%,100% { box-shadow: 0 8px 24px rgba(251,111,146,0.4); }
+            50% { box-shadow: 0 8px 36px rgba(251,111,146,0.8), 0 0 0 8px rgba(251,111,146,0.1); }
+        }
+        #music-label {
+            position: fixed;
+            bottom: 35px;
+            left: 92px;
+            z-index: 9999;
+            font-family: var(--font-sans);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--deep-rose);
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        #music-btn:hover ~ #music-label, #music-label.show { opacity: 1; }
+
+        .experience-container { position: relative; height: 100vh; width: 100%; }
 
         .scene {
             position: absolute;
@@ -203,6 +240,7 @@
         }
         #scene-3 h1 { font-size: clamp(1.5rem, 4vw, 3rem); margin-bottom: 0.3rem; }
         #scene-3 > .scene-3-inner > p { margin-bottom: 0.8rem; opacity: 0.75; }
+
 
         .photo-grid {
             display: grid;
@@ -343,6 +381,14 @@
 
     <canvas id="canvas-petals"></canvas>
 
+    <!-- MUSIC -->
+<audio id="bg-music" loop>
+    <!-- Replace src with your music file, e.g. src="music/birthday.mp3" -->
+    <source src="E:\birthday.html\music\Happy Birthday on Piano - lesfm_1779912218143 (41).mp3" type="audio/mpeg">
+</audio>
+<button id="music-btn" onclick="toggleMusic()" title="Play / Pause Music">▶</button>
+<span id="music-label">♪ Birthday Music</span>
+
     <div class="nav-progress">
 
         <div class="dot active"></div>
@@ -356,7 +402,7 @@
 
     <main class="experience-container">
 
-    
+        <!-- Scene 1 -->
 
         <section class="scene active" id="scene-1">
 
@@ -381,7 +427,7 @@
 
         </section>
 
-        
+        <!-- Scene 2 -->
 
         <section class="scene" id="scene-2">
 
@@ -416,18 +462,14 @@
 
         </section>
 
-        
+        <!-- Scene 3 -->
 
         <section class="scene" id="scene-3">
-
-            <h1>Capturing Your Magic</h1>
-
-            <p>Every time I look at you, I see a masterpiece.</p>
-
-           
-
+              <div class="scene-3-inner">
+                   <h1>Capturing Your Magic</h1>
+                   <p>Every time I look at you, I see a masterpiece.</p>
+  
             <div class="photo-grid">
-
                 <div class="photo-frame" style="--r:-5deg">
                     <img src="IMG-20260524-WA0004.jpg" alt="Memory 1">
                 </div>
@@ -448,19 +490,17 @@
                     <img src="IMG-20260308-WA0037.jpg" alt="Memory 5">
                 </div>
 
-                 <div class="photo-frame" style="--r:2deg">
+                <div class="photo-frame" style="--r:2deg">
                     <img src="IMG-20260214-WA0040.jpg" alt="Memory 6">
                 </div>
+                </div>
 
-            </div>
 
-            <button class="btn" onclick="nextScene(4)">
-                Keep Walking
-            </button>
+            <button class="btn" onclick="nextScene(4)">Keep Walking</button>
+        </div>
+    </section>
 
-        </section>
-
-        
+        <!-- Scene 4 -->
 
         <section class="scene" id="scene-4">
 
@@ -489,7 +529,7 @@
 
         </section>
 
-    
+        <!-- Scene 5 -->
 
         <section class="scene" id="scene-5">
 
@@ -528,7 +568,7 @@
 
         </section>
 
-        
+        <!-- Scene 6 -->
 
         <section class="scene" id="scene-6">
 
@@ -561,7 +601,7 @@
 
     <script>
 
-        
+        // CUSTOM CURSOR
 
         const cursor = document.getElementById('cursor');
         const follower = document.getElementById('cursor-follower');
@@ -580,7 +620,41 @@
 
         });
 
-        
+          // MUSIC
+    const music = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-btn');
+    const musicLabel = document.getElementById('music-label');
+    let musicPlaying = false;
+
+    function toggleMusic() {
+        if (musicPlaying) {
+            music.pause();
+            musicBtn.textContent = '▶';
+            musicBtn.classList.remove('playing');
+            musicLabel.textContent = '♪ Birthday Music';
+        } else {
+            music.play().catch(() => {});
+            musicBtn.textContent = '⏸';
+            musicBtn.classList.add('playing');
+            musicLabel.textContent = '♪ Now Playing';
+        }
+        musicPlaying = !musicPlaying;
+        musicLabel.classList.add('show');
+        setTimeout(() => musicLabel.classList.remove('show'), 2500);
+    }
+
+    // Auto-play on first user interaction
+    document.addEventListener('click', function startOnce() {
+        if (!musicPlaying) toggleMusic();
+        document.removeEventListener('click', startOnce);
+    }, { once: false });
+    // Actually tie auto-play to the Enter button specifically
+    document.querySelector('#scene-1 .btn').addEventListener('click', () => {
+        if (!musicPlaying) toggleMusic();
+    }, { once: true });
+
+
+        // SCENE NAVIGATION
 
         let currentScene = 1;
 
@@ -608,6 +682,8 @@
         }
 
         
+
+        // PETALS
 
         const canvas = document.getElementById('canvas-petals');
         const ctx = canvas.getContext('2d');
@@ -711,7 +787,7 @@
 
         animate();
 
-        
+        // WISH LOGIC
 
         function triggerWish() {
 
