@@ -620,58 +620,67 @@
         });
 
           // MUSIC
-    const music = document.getElementById('bg-music');
+   const music = document.getElementById('bg-music');
 const musicBtn = document.getElementById('music-btn');
 const musicLabel = document.getElementById('music-label');
 
-let musicPlaying = false;
+function playMusic() {
+
+    music.play()
+        .then(() => {
+
+            musicBtn.textContent = '⏸';
+            musicBtn.classList.add('playing');
+            musicLabel.textContent = '♪ Now Playing';
+
+        })
+        .catch((err) => {
+
+            console.log(err);
+
+        });
+}
+
+function pauseMusic() {
+
+    music.pause();
+
+    musicBtn.textContent = '▶';
+    musicBtn.classList.remove('playing');
+    musicLabel.textContent = '♪ Birthday Music';
+}
 
 function toggleMusic() {
 
     if (music.paused) {
 
-        music.play();
-
-        musicBtn.textContent = '⏸';
-        musicBtn.classList.add('playing');
-        musicLabel.textContent = '♪ Now Playing';
-
-        musicPlaying = true;
+        playMusic();
 
     } else {
 
-        music.pause();
-
-        musicBtn.textContent = '▶';
-        musicBtn.classList.remove('playing');
-        musicLabel.textContent = '♪ Birthday Music';
-
-        musicPlaying = false;
+        pauseMusic();
     }
 
     musicLabel.classList.add('show');
 
     setTimeout(() => {
+
         musicLabel.classList.remove('show');
+
     }, 2500);
 }
 
-// Start music when first button is clicked
-document.querySelector('#scene-1 .btn').addEventListener('click', () => {
+
+// START MUSIC AFTER FIRST USER INTERACTION
+
+document.body.addEventListener('click', () => {
 
     if (music.paused) {
 
-        music.play();
-
-        musicBtn.textContent = '⏸';
-        musicBtn.classList.add('playing');
-
-        musicPlaying = true;
+        playMusic();
     }
 
 }, { once: true });
-
-
         // SCENE NAVIGATION
 
         let currentScene = 1;
